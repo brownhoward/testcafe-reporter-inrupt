@@ -1,0 +1,48 @@
+{
+  "name": "@trint/testcafe-reporter-slack",
+  "version": "0.0.9",
+  "description": "TestCafe slack reporter plugin.",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/trint-it/testcafe-reporter-slack.git"
+  },
+  "author": "Shafied <shafiedn@gmail.com>",
+  "contributor": {
+    "name": "Fabio Antunes",
+    "email": "fabio@trint.com"
+  },
+  "main": "lib/index",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "gulp test",
+    "publish-please": "publish-please",
+    "prepublish": "publish-please guard",
+    "prod": "gulp --production",
+    "dev": "gulp watch"
+  },
+  "keywords": [
+    "testcafe",
+    "reporter",
+    "plugin"
+  ],
+  "devDependencies": {
+    "callsite-record": "^3.2.0",
+    "del": "^1.2.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^5.2.1",
+    "gulp-mocha": "^2.2.0",
+    "normalize-newline": "^1.0.2",
+    "publish-please": "^2.1.4",
+    "read-file-relative": "^1.2.0",
+    "testcafe": "^0.2.0-alpha"
+  },
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "envs": "^0.1.6",
+    "gulp-cli": "^2.3.0",
+    "node": "^15.10.0",
+    "slack-node": "^0.1.8"
+  }
+}
