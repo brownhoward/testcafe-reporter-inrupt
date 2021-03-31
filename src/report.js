@@ -1,9 +1,10 @@
 require('dotenv').config();
-const chalk = require('chalk')
+
+const chalk = require('chalk');
 const envs = require('envs');
 
-export default class report {
-    constructor(toConsole=true, toSlack=false, mergeReport=true) {
+module.exports = class report {
+    constructor(mergeReport=true, toConsole=true, toSlack=false) {
 
         // Store parameters
         this.toConsole = toConsole;
@@ -20,8 +21,8 @@ export default class report {
 
         // Blank Reports
         this.report = [];
-        //this.errorReport = [];
     }
+
 
     // Append a message
     addMessage(message, hold=false) {
@@ -32,14 +33,6 @@ export default class report {
         }
     }
 
-    // Append an error
-    //addError(message, hold=false) {
-    //    this.errorReport.push(message);
-    //    if (!hold && !this.mergeReport) {
-    //        this.sendMessage(this.errorReport.join("\n\n"));
-    //        this.errorReport = [];
-    //    }
-    //}
 
     sendMessage(reportStr, slackProperties = null) {
 
@@ -70,6 +63,7 @@ export default class report {
         }
     }
 
+
     sendFixtureReport() {
         if (!this.mergeReport && this.report.length > 0) {
             const reportStr = this.report.join("\n");
@@ -78,6 +72,7 @@ export default class report {
             this.errorReport = [];
         }
     }
+
 
     sendTaskReport(nrFailedTests) {
         const reportStr = this.report.join("\n");
@@ -92,8 +87,4 @@ export default class report {
             : null
         )
     }
-
-    //getErrorMessage() {
-    //    return this.errorMessage.join("\n\n");
-    //}
 }

@@ -1,16 +1,12 @@
 {
-  "name": "@trint/testcafe-reporter-slack",
-  "version": "0.0.9",
-  "description": "TestCafe slack reporter plugin.",
+  "name": "@kevin-inrupt/testcafe-reporter-inrupt",
+  "version": "0.1.0",
+  "description": "TestCafe Inrupt reporter plugin.",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/trint-it/testcafe-reporter-slack.git"
+    "url": "git+ssh://git@github.com/kevin-inrupt/testcafe-reporter-inrupt.git"
   },
-  "author": "Shafied <shafiedn@gmail.com>",
-  "contributor": {
-    "name": "Fabio Antunes",
-    "email": "fabio@trint.com"
-  },
+  "author": "Kevin Howard <kevinh@inrupt.com>",
   "main": "lib/index",
   "files": [
     "lib"
@@ -28,21 +24,35 @@
     "plugin"
   ],
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "callsite-record": "^3.2.0",
     "del": "^1.2.0",
+    "eslint": "^7.22.0",
+    "eslint-plugin-testing-library": "^3.10.2",
     "gulp": "^3.9.1",
-    "gulp-babel": "^5.2.1",
-    "gulp-mocha": "^2.2.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-mocha": "^8.0.0",
     "normalize-newline": "^1.0.2",
-    "publish-please": "^2.1.4",
+    "publish-please": "^5.5.2",
     "read-file-relative": "^1.2.0",
-    "testcafe": "^0.2.0-alpha"
+    "testcafe": "^15.1.317922"
   },
   "dependencies": {
+    "@babel/core": "^7.13.10",
     "dotenv": "^4.0.0",
     "envs": "^0.1.6",
     "gulp-cli": "^2.3.0",
     "node": "^15.10.0",
-    "slack-node": "^0.1.8"
-  }
+    "slack-node": "^0.1.8",
+    "typescript": "^4.2.3"
+  },
+  "bugs": {
+    "url": "https://github.com/kevin-inrupt/testcafe-reporter-inrupt/issues"
+  },
+  "homepage": "https://github.com/kevin-inrupt/testcafe-reporter-inrupt#readme",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "license": "MIT"
 }

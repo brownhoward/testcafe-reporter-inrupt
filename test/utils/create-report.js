@@ -1,4 +1,6 @@
-var buildReporterPlugin = require('testcafe').embeddingUtils.buildReporterPlugin;
+var testcafe = require('testcafe');
+var embeddingUtils = require('testcafe').embeddingUtils;
+//var buildReporterPlugin = embeddingUtils.buildReporterPlugin;
 var pluginFactory       = require('../../lib');
 var reporterTestCalls   = require('./reporter-test-calls');
 
@@ -11,7 +13,7 @@ module.exports = function createReport (withColors) {
         }
     };
 
-    var plugin = buildReporterPlugin(pluginFactory, outStream);
+    var plugin = testcafe.embeddingUtils.embeddingUtils.embeddingUtilsbuildReporterPlugin(pluginFactory, outStream);
 
     plugin.chalk.enabled = !plugin.noColors && withColors;
     plugin.symbols       = { ok: '✓', err: '✖' };
