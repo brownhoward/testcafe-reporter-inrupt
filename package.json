@@ -21,6 +21,7 @@
   "keywords": [
     "testcafe",
     "reporter",
+    "inrupt",
     "plugin"
   ],
   "devDependencies": {
@@ -42,7 +43,7 @@
     "dotenv": "^4.0.0",
     "envs": "^0.1.6",
     "gulp-cli": "^2.3.0",
-    "node": "^15.10.0",
+    "node": "^12.10.0",
     "slack-node": "^0.1.8",
     "typescript": "^4.2.3"
   },

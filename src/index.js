@@ -56,7 +56,7 @@ module.exports = function () {
 
 
         // Executed prior to a Fixture starting
-        reportFixtureStart (name, path) {
+        reportFixtureStart (name, path, meta) {
             this.fixtureStartTime =  Date.now();
             this.report.addMessage("", true);
             this.currentFixtureName = name;
@@ -65,7 +65,7 @@ module.exports = function () {
 
 
         // Executed when an individual Test has ended
-        reportTestDone (name, testRunInfo) {
+        reportTestDone (name, testRunInfo, meta) {
 
             // Test Duration
             const durationStr = this.fmtTime(testRunInfo.durationMs);
@@ -105,16 +105,18 @@ module.exports = function () {
 
 
         // Executed when all of the tests have been executed
-        reportTaskDone (endTime, passed, warnings) {
+        reportTaskDone (endTime, passed, warnings, result) {
 
             if (this.includeFooter) {
                 const durationMs  = endTime - this.startTime;
                 const durationStr = this.fmtTime(durationMs);
-                let footer = passed === this.testCount ?
-                    `${this.testCount} passed` :
-                    `${this.testCount - passed}/${this.testCount} failed`;
-    
-                footer = `*${footer}* (Duration: ${durationStr})`;
+                let footer = result.failedCount ?
+                    `${result.failedCount}/${this.testCount} failed` :
+                    `${result.passedCount} passed`;
+
+                footer += ` (Duration: ${durationStr})`;
+                footer += ` (Skipped: ${result.skippedCount})`;
+                footer += ` (Warnings: ${warnings.length})`;
     
                 this.report.addMessage("", true);
                 this.report.addMessage(footer, true);
