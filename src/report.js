@@ -41,6 +41,7 @@ module.exports = class report {
 
             // Set icons
             let consoleReportStr = reportStr.replace(/:red_circle:/g, chalk.red("X"));
+            consoleReportStr = consoleReportStr.replace(/:white_circle:/g, "-");
             consoleReportStr = consoleReportStr.replace(/:large_yellow_circle:/g, chalk.yellow("?"));
             consoleReportStr = consoleReportStr.replace(/:large_green_circle:/g, chalk.green("√"));
 

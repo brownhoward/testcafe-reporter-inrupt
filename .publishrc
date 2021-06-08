@@ -2,6 +2,8 @@
     "validations": {
         "vulnerableDependencies": false,
         "uncommittedChanges": false,
-        "untrackedFiles": false
+        "untrackedFiles": false,
+        "branch": "main",
+        "gitTag": false
     }
 }

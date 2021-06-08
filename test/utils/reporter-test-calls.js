@@ -1,14 +1,15 @@
-var UncaughtErrorOnPage            = require('testcafe').embeddingUtils.testRunErrors.UncaughtErrorOnPage;
-var TestRunErrorFormattableAdapter = require('testcafe').embeddingUtils.TestRunErrorFormattableAdapter;
-var ActionElementNotFoundError     = require('testcafe').embeddingUtils.testRunErrors.ActionElementNotFoundError;
+//var UncaughtErrorOnPage            = require('testcafe').embeddingUtils.testRunErrors.UncaughtErrorOnPage;
+//var TestRunErrorFormattableAdapter = require('testcafe').embeddingUtils.TestRunErrorFormattableAdapter;
+//var ActionElementNotFoundError     = require('testcafe').embeddingUtils.testRunErrors.ActionElementNotFoundError;
 var testCallsite                   = require('./test-callsite');
 
-
+/*
 function makeErrors (errDescrs) {
     return errDescrs.map(function (descr) {
         return new TestRunErrorFormattableAdapter(descr.err, descr.metaInfo);
     });
 }
+*/
 
 module.exports = [
     {
@@ -46,9 +47,9 @@ module.exports = [
         args:   [
             'Second test in first fixture',
             {
-                errs: makeErrors([
+                errs:           [],
+/*                errs: makeErrors([
                     {
-
                         err: new UncaughtErrorOnPage('Some error', 'http://example.org'),
 
                         metaInfo: {
@@ -68,7 +69,7 @@ module.exports = [
                         }
                     }
                 ]),
-
+*/
                 durationMs:     74000,
                 unstable:       false,
                 screenshotPath: '/screenshots/1445437598847'
@@ -144,8 +145,8 @@ module.exports = [
         args:   [
             'First test in third fixture',
             {
-                // errs: [],
-                errs: makeErrors([
+                 errs: [],
+/*                errs: makeErrors([
                     {
                         err: new ActionElementNotFoundError(),
 
@@ -156,7 +157,7 @@ module.exports = [
                         }
                     }
                 ]),
-
+*/
                 durationMs:     74000,
                 unstable:       true,
                 screenshotPath: null

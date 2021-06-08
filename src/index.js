@@ -1,6 +1,4 @@
 const report = require("./report");
-//import report from "./report";
-
 const envs = require("envs");
 
 module.exports = function () {
@@ -74,9 +72,12 @@ module.exports = function () {
             let resultIcon = "";
             if (testRunInfo.errs.length > 0)
                 resultIcon = ":red_circle:";
-            else if ((testRunInfo.warnings !== null) && 
+            else if (testRunInfo.skippedCount > 0)
+                resultIcon = ":white_circle:";
+            else if (((testRunInfo.warnings !== null) && 
                      (testRunInfo.warnings !== undefined) && 
-                     (testRunInfo.warnings.length > 0))
+                     (testRunInfo.warnings.length > 0)) ||
+                     (testRunInfo.unstable))
                 resultIcon = ":large_yellow_circle:";
             else
                 resultIcon = ":large_green_circle:";

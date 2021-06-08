@@ -13,6 +13,7 @@ module.exports = function createReport (withColors) {
         }
     };
 
+    /*
     var plugin = testcafe.embeddingUtils.embeddingUtils.embeddingUtilsbuildReporterPlugin(pluginFactory, outStream);
 
     plugin.chalk.enabled = !plugin.noColors && withColors;
@@ -33,9 +34,10 @@ module.exports = function createReport (withColors) {
             return result;
         };
     }
+    */
 
     reporterTestCalls.forEach(function (call) {
-        plugin[call.method].apply(plugin, call.args);
+        //plugin[call.method].apply(plugin, call.args);
     });
 
     // NOTE: mock stack entries
