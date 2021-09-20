@@ -13,14 +13,14 @@ module.exports = function () {
         reportTaskStart (startTime, userAgents, testCount) {
 
             // Configuration Flags
-            this.toConsole = ("true" == envs("TESTCAFE_REPORT_TOCONSOLE", "true"));
-            this.mergeReport = ("true" == envs("TESTCAFE_REPORT_DISPLAYMODE", "false"));
-            this.showErrors = ("true" == envs("TESTCAFE_REPORT_SHOWERRORS", "false"));
-            this.includeHeader = ("true" == envs("TESTCAFE_REPORT_INCLUDEHEADER", "true"));
-            this.includeFooter = ("true" == envs("TESTCAFE_REPORT_INCLUDEFOOTER", "true"));
+            this.toConsole = ("TRUE" == envs("TESTCAFE_REPORT_TOCONSOLE", "TRUE").toUpperCase());
+            this.mergeReport = ("TRUE" == envs("TESTCAFE_REPORT_MERGE", "FALSE").toUpperCase());
+            this.showErrors = ("TRUE" == envs("TESTCAFE_REPORT_SHOWERRORS", "TRUE").toUpperCase());
+            this.includeHeader = ("TRUE" == envs("TESTCAFE_REPORT_INCLUDEHEADER", "FALSE").toUpperCase());
+            this.includeFooter = ("TRUE" == envs("TESTCAFE_REPORT_INCLUDEFOOTER", "TRUE").toUpperCase());
 
             // Slack
-            this.toSlack = ("true" == envs("TESTCAFE_REPORT_TOSLACK", "false"));
+            this.toSlack = ("TRUE" == envs("TESTCAFE_REPORT_TOSLACK", "false").toUpperCase());
 
             // Create the new Report
             this.report = new report(this.mergeReport, this.toConsole, this.toSlack);
@@ -29,19 +29,11 @@ module.exports = function () {
             this.testCount = testCount;
 
             // Output header
+            this.report.addMessage(`Date/Time: ${startTime}`, true);
+            this.report.addMessage(`Environment: ${userAgents}`, true);
             if (this.includeHeader) {
 
-                // Configuration information
-                console.log("");
-                console.log("TestCafe_Report_Inrupt");
-                console.log("  Output to Console? " + this.toConsole.toString());
-                console.log("  Output to Slack? " + this.toSlack.toString());
-                console.log("  Merged Report? " + this.mergeReport.toString());
-                console.log("");
-
                 // Output the Report header
-                this.report.addMessage(`Date/Time: ${startTime}`, true);
-                this.report.addMessage(`Environment: ${userAgents}`, true);
                 this.report.addMessage(`Against: ${envs('ENV', 'No env specified')}`, true);
                 this.report.addMessage(``, true);
                 this.report.addMessage(`CI Job: ${envs('CI_JOB_URL', '')}`, true);

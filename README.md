@@ -10,14 +10,9 @@ This [TestCafe](http://devexpress.github.io/testcafe) reporter is configurable t
 
 ## Installation
 
-NOTE: This reporter is not yet deployed to npm. To manually install:
-
-1. If necessary, create a `\testcafe-reporter-inrupt` folder in the `\node_modules` folder within the TestCafe project.
-2. Copy the `\lib` folder to the `\testcafe-reporter-inrupt` folder.
-
 To install this reporter via npm to your TestCafe project, execute:
 ```
-npm i testcafe-reporter-inrupt
+npm install --save-dev testcafe-reporter-inrupt
 ```
 
 ## Setup

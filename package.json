@@ -1,12 +1,15 @@
 {
-  "name": "@kevin-inrupt/testcafe-reporter-inrupt",
+  "name": "testcafe-reporter-inrupt",
   "version": "0.1.0",
   "description": "TestCafe Inrupt reporter plugin.",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/kevin-inrupt/testcafe-reporter-inrupt.git"
   },
-  "author": "Kevin Howard <kevinh@inrupt.com>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Kevin Howard",
   "main": "lib/index",
   "files": [
     "lib"
