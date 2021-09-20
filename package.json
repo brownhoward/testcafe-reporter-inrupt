@@ -1,6 +1,6 @@
 {
   "name": "testcafe-reporter-inrupt",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TestCafe Inrupt reporter plugin.",
   "repository": {
     "type": "git",
