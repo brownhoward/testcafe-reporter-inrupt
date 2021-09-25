@@ -20,7 +20,7 @@ module.exports = function () {
             this.includeFooter = ("TRUE" == envs("TESTCAFE_REPORT_INCLUDEFOOTER", "TRUE").toUpperCase());
 
             // Slack
-            this.toSlack = ("TRUE" == envs("TESTCAFE_REPORT_TOSLACK", "false").toUpperCase());
+            this.toSlack = ("TRUE" == envs("TESTCAFE_REPORT_TOSLACK", "FALSE").toUpperCase());
 
             // Create the new Report
             this.report = new report(this.mergeReport, this.toConsole, this.toSlack);
@@ -29,18 +29,18 @@ module.exports = function () {
             this.testCount = testCount;
 
             // Output header
-            this.report.addMessage(`Date/Time: ${startTime}`, true);
-            this.report.addMessage(`Environment: ${userAgents}`, true);
+            this.report.addMessage(`Date/Time: ${startTime}`);
+            this.report.addMessage(`Environment: ${userAgents}`);
             if (this.includeHeader) {
 
                 // Output the Report header
-                this.report.addMessage(`Against: ${envs('ENV', 'No env specified')}`, true);
-                this.report.addMessage(``, true);
-                this.report.addMessage(`CI Job: ${envs('CI_JOB_URL', '')}`, true);
-                this.report.addMessage(`Merge Request: ${envs('CI_MERGE_REQUEST_PROJECT_URL', '')}`, true);
-                this.report.addMessage(`User: @${envs('GITHUB_USER_LOGIN', 'No One')}`, true);
-                this.report.addMessage(``, true);
-                this.report.addMessage(`Startup time (${this.fmtTime(startTime - reporterCreatedTime)})`, true);
+                this.report.addMessage(`Against: ${envs('ENV', 'No env specified')}`);
+                this.report.addMessage(``);
+                this.report.addMessage(`CI Job: ${envs('CI_JOB_URL', '')}`);
+                this.report.addMessage(`Merge Request: ${envs('CI_MERGE_REQUEST_PROJECT_URL', '')}`);
+                this.report.addMessage(`User: @${envs('GITHUB_USER_LOGIN', 'No One')}`);
+                this.report.addMessage(``);
+                this.report.addMessage(`Startup time (${this.fmtTime(startTime - reporterCreatedTime)})`);
             }
         },
 
@@ -48,9 +48,9 @@ module.exports = function () {
         // Executed prior to a Fixture starting
         reportFixtureStart (name, path, meta) {
             this.fixtureStartTime =  Date.now();
-            this.report.addMessage("", true);
+            this.report.addMessage("");
             this.currentFixtureName = name;
-            this.report.addMessage(this.currentFixtureName, true);
+            this.report.addMessage(this.currentFixtureName);
         },
 
 
@@ -111,8 +111,8 @@ module.exports = function () {
                 footer += ` (Skipped: ${result.skippedCount})`;
                 footer += ` (Warnings: ${warnings.length})`;
     
-                this.report.addMessage("", true);
-                this.report.addMessage(footer, true);
+                this.report.addMessage("");
+                this.report.addMessage(footer);
                 this.report.sendTaskReport(this.testCount - passed);
             }
         },
