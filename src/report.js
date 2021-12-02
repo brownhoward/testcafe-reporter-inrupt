@@ -1,91 +1,85 @@
 require('dotenv').config();
 
+const consoleReport = require("./consoleReport");
+const slackReport = require("./slackReport");
+
 const chalk = require('chalk');
 const envs = require('envs');
 
 module.exports = class report {
-    constructor(mergeReport=true, toConsole=true, toSlack=false) {
 
-        // Store parameters
-        this.toConsole = toConsole;
-        this.toSlack = toSlack;
-        this.mergeReport = mergeReport;
+    constructor() {
 
-        // Configure Slack
-        this.slack = null;
-        if (toSlack) {
-            let slackNode = require('slack-node');
-            this.slack = new slackNode();
-            this.slack.setWebhook(envs('TESTCAFE_SLACK_WEBHOOK', 'http://example.com'));    
+        // Configuration Flags
+
+        // Output to Console?
+        this.toConsole = ("TRUE" == envs("TESTCAFE_REPORT_TOCONSOLE", "TRUE").toUpperCase());
+        if (this.toConsole) {
+            this.consoleReport = new consoleReport();
         }
 
-        // Blank Reports
-        this.report = [];
+        // Output to Slack?
+        this.toSlack = ("TRUE" == envs("TESTCAFE_REPORT_TOSLACK", "FALSE").toUpperCase());
+        if (this.toSlack) {
+            this.slackReport = new slackReport();
+        }
     }
 
 
-    // Append a message
+    // Add a message
     addMessage(message) {
-        this.report.push(message);
-        if (!this.mergeReport) {
-            this.sendMessage(this.report.join("\n"));
-            this.report = [];
-        }
+        if (this.toConsole)
+            this.consoleReport.addMessage(message);
+        if (this.toSlack)
+            this.slackReport.addMessage(message);
+    }
+
+
+    // Add Errors
+    addErrors(testRunInfo) {
+
+        if ((false == this.consoleReport.showErrors()) && (false == this.slackReport.showErrors()))
+            return;
+
+        // Any errors to display?
+        if (0 == testRunInfo.errs.length)
+            return;
+            
+        // Build the error text
+        let errorStr = "";
+        let separator = "";
+        testRunInfo. errs.forEach((err, idx) => {
+            errorStr += separator + this.formatError(err, `${idx + 1}) `);
+            separator = "\n";
+        });
+            
+        if ((this.toConsole) && (this.consoleReport.showErrors()))
+            this.consoleReport.addErrors(message);
+        if ((this.toSlack) && (this.slackReport.showErrors()))
+            this.slackReport.addError(message);
     }
 
 
     sendMessage(reportStr, slackProperties = null) {
-
-        // Output to Console?
-        if (this.toConsole) {
-
-            // Set icons
-            let consoleReportStr = reportStr.replace(/:red_circle:/g, chalk.red("X"));
-            consoleReportStr = consoleReportStr.replace(/:white_circle:/g, "-");
-            consoleReportStr = consoleReportStr.replace(/:large_yellow_circle:/g, chalk.yellow("?"));
-            consoleReportStr = consoleReportStr.replace(/:large_green_circle:/g, chalk.green("√"));
-
-            // Output
-            console.log(consoleReportStr);
-        }
-
-        // Output to Slack?
-        if (this.toSlack) {
-            this.slack.webhook(Object.assign({
-                channel: envs('TESTCAFE_SLACK_CHANNEL', '#testcafe'),
-                username: envs('TESTCAFE_SLACK_BOT', 'testcafebot'),
-                text: reportStr
-            }, slackProperties), function (err, response) {
-                if (err) {
-                    console.log('Unable to send a message to Slack');
-                    console.log(response);
-                }
-            })
-        }
+        if (this.toConsole)
+            this.consoleReport.sendMessage(reportStr);
+        if (this.toSlack)
+            this.slackReport.sendMessage(reportStr, slackProperties);
     }
 
 
     sendFixtureReport() {
-        if (!this.mergeReport && this.report.length > 0) {
-            const reportStr = this.report.join("\n");
-            this.sendMessage(reportStr);
-            this.report = [];
-            this.errorReport = [];
-        }
+        if (this.toConsole)
+            this.consoleReport.sendFixtureReport();
+        if (this.toSlack)
+            this.slackReport.sendFixtureReport();
     }
 
 
     sendTaskReport(nrFailedTests) {
-        const reportStr = this.report.join("\n");
-        const textStr = (nrFailedTests > 1)  ? " tests failed" : " test";
-        this.sendMessage(reportStr, nrFailedTests > 0
-            ? {
-                "attachments": [{
-                    color: "danger",
-                    text: "${nrFailedTests}" + textStr
-                }]
-            }
-            : null
-        )
+        if (this.toConsole)
+            this.consoleReport.sendTaskReport(nrFailedTests);
+        if (this.toSlack)
+            this.slackReport.sendTaskReport(nrFailedTests);
     }
 }

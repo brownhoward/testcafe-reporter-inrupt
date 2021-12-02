@@ -12,18 +12,8 @@ module.exports = function () {
         // Executed prior to the start of the test run
         reportTaskStart (startTime, userAgents, testCount) {
 
-            // Configuration Flags
-            this.toConsole = ("TRUE" == envs("TESTCAFE_REPORT_TOCONSOLE", "TRUE").toUpperCase());
-            this.mergeReport = ("TRUE" == envs("TESTCAFE_REPORT_MERGE", "FALSE").toUpperCase());
-            this.showErrors = ("TRUE" == envs("TESTCAFE_REPORT_SHOWERRORS", "TRUE").toUpperCase());
-            this.includeHeader = ("TRUE" == envs("TESTCAFE_REPORT_INCLUDEHEADER", "FALSE").toUpperCase());
-            this.includeFooter = ("TRUE" == envs("TESTCAFE_REPORT_INCLUDEFOOTER", "TRUE").toUpperCase());
-
-            // Slack
-            this.toSlack = ("TRUE" == envs("TESTCAFE_REPORT_TOSLACK", "FALSE").toUpperCase());
-
             // Create the new Report
-            this.report = new report(this.mergeReport, this.toConsole, this.toSlack);
+            this.report = new report();
 
             this.startTime = startTime;
             this.testCount = testCount;
@@ -79,21 +69,13 @@ module.exports = function () {
 
             // Unstable?
             if (testRunInfo.unstable)
-                message += " (Unstable)";
+                message += " (unstable)";
 
             // Append to Report
             this.report.addMessage(message);
 
-            // Include Error details?
-            if (this.showErrors && (testRunInfo.errs.length > 0)) {
-                let errorStr = "";
-                let separator = "";
-                testRunInfo. errs.forEach((err, idx) => {
-                    errorStr += separator + this.formatError(err, `${idx + 1}) `);
-                    separator = "\n";
-                });
-                this.report.addMessage(errorStr);
-            }
+            // Append Errors
+            this.report.addErrors(testRunInfo);
         },
 
 
