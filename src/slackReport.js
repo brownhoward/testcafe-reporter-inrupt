@@ -7,8 +7,8 @@ module.exports = class slackReport {
     constructor() {
 
         // Get parameters
-        this.mergeReport = ("TRUE" == envs("TESTCAFE_REPORT_SLACK_MERGE", "FALSE").toUpperCase());
-        this.showErrors = ("TRUE" == envs("TESTCAFE_REPORT_SLACK_SHOWERRORS", "TRUE").toUpperCase());
+        this.mergeReport = ("TRUE" == envs("TESTCAFE_REPORT_SLACK_MERGE", "TRUE").toUpperCase());
+        this.showErrors = ("TRUE" == envs("TESTCAFE_REPORT_SLACK_SHOWERRORS", "FALSE").toUpperCase());
         this.includeHeader = ("TRUE" == envs("TESTCAFE_REPORT_SLACK_INCLUDEHEADER", "FALSE").toUpperCase());
         this.includeFooter = ("TRUE" == envs("TESTCAFE_REPORT_SLACK_INCLUDEFOOTER", "TRUE").toUpperCase());
 
