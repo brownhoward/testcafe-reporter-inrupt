@@ -9,9 +9,8 @@ module.exports = class consoleReport {
 
         // Store parameters
         this.mergeReport = ("TRUE" == envs("TESTCAFE_REPORT_CONSOLE_MERGE", "FALSE").toUpperCase());
-        this.showErrors = ("TRUE" == envs("TESTCAFE_REPORT_CONSOLE_SHOWERRORS", "TRUE").toUpperCase());
+        this.includeErrors = ("TRUE" == envs("TESTCAFE_REPORT_CONSOLE_SHOWERRORS", "TRUE").toUpperCase());
         this.includeHeader = ("TRUE" == envs("TESTCAFE_REPORT_CONSOLE_INCLUDEHEADER", "FALSE").toUpperCase());
-        this.includeFooter = ("TRUE" == envs("TESTCAFE_REPORT_CONSOLE_INCLUDEFOOTER", "TRUE").toUpperCase());
 
         // Blank Report
         this.report = [];
@@ -19,7 +18,7 @@ module.exports = class consoleReport {
 
 
     showErrors() {
-        return this.showErrors;
+        return this.includeErrors;
     }
 
     
@@ -30,6 +29,28 @@ module.exports = class consoleReport {
             this.sendMessage(this.report.join("\n"));
             this.report = [];
         }
+    }
+
+
+    // Add Errors
+    addErrors(testRunInfo) {
+
+        if (false == this.includeErrors)
+            return;
+
+        // Any errors to display?
+        if (0 == testRunInfo.errs.length)
+            return;
+            
+        // Build the error text
+        let errorStr = "";
+        let separator = "";
+        testRunInfo. errs.forEach((err, idx) => {
+            errorStr += separator + this.formatError(err, `${idx + 1}) `);
+            separator = "\n";
+        });
+            
+        this.addMessage(errorStr);
     }
 
 
@@ -51,22 +72,22 @@ module.exports = class consoleReport {
             const reportStr = this.report.join("\n");
             this.sendMessage(reportStr);
             this.report = [];
-            this.errorReport = [];
         }
     }
 
 
     sendTaskReport(nrFailedTests) {
         const reportStr = this.report.join("\n");
-        const textStr = (nrFailedTests > 1)  ? " tests failed" : " test";
-        this.sendMessage(reportStr, nrFailedTests > 0
-            ? {
-                "attachments": [{
-                    color: "danger",
-                    text: textStr
-                }]
-            }
-            : null
-        )
+        const textStr = (nrFailedTests > 1)  ? " tests failed" : " test failed";
+        this.sendMessage(reportStr);
+        // this.sendMessage(reportStr, nrFailedTests > 0
+        //     ? {
+        //         "attachments": [{
+        //             color: "danger",
+        //             text: textStr
+        //         }]
+        //     }
+        //     : null
+        // )
     }
 }

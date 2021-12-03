@@ -8,9 +8,8 @@ module.exports = class slackReport {
 
         // Get parameters
         this.mergeReport = ("TRUE" == envs("TESTCAFE_REPORT_SLACK_MERGE", "TRUE").toUpperCase());
-        this.showErrors = ("TRUE" == envs("TESTCAFE_REPORT_SLACK_SHOWERRORS", "FALSE").toUpperCase());
+        this.includeErrors = ("TRUE" == envs("TESTCAFE_REPORT_SLACK_SHOWERRORS", "FALSE").toUpperCase());
         this.includeHeader = ("TRUE" == envs("TESTCAFE_REPORT_SLACK_INCLUDEHEADER", "FALSE").toUpperCase());
-        this.includeFooter = ("TRUE" == envs("TESTCAFE_REPORT_SLACK_INCLUDEFOOTER", "TRUE").toUpperCase());
 
         this.slackWebhook = envs('TESTCAFE_SLACK_WEBHOOK', 'http://example.com');
         this.slackChannel = envs('TESTCAFE_SLACK_CHANNEL', '#testcafe');
@@ -21,12 +20,12 @@ module.exports = class slackReport {
         this.slack.setWebhook(this.slackWebhook);    
 
         // Initialize the report
-        const report = [];
+        this.report = [];
     }
 
 
     showErrors() {
-        return this.showErrors;
+        return this.includeErrors;
     }
 
     
@@ -60,22 +59,22 @@ module.exports = class slackReport {
             const reportStr = this.report.join("\n");
             this.sendMessage(reportStr);
             this.report = [];
-            this.errorReport = [];
         }
     }
 
 
     sendTaskReport(nrFailedTests) {
         const reportStr = this.report.join("\n");
-        const textStr = (nrFailedTests > 1)  ? " tests failed" : " test";
-        this.sendMessage(reportStr, nrFailedTests > 0
-            ? {
-                "attachments": [{
-                    color: "danger",
-                    text: textStr
-                }]
-            }
-            : null
-        )
+        const textStr = (nrFailedTests > 1)  ? " tests failed" : " test failed";
+        this.sendMessage(reportStr);
+        // this.sendMessage(reportStr, nrFailedTests > 0
+        //     ? {
+        //         "attachments": [{
+        //             color: "danger",
+        //             text: textStr
+        //         }]
+        //     }
+        //     : null
+        // )
     }
 }

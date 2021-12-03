@@ -3,7 +3,6 @@ require('dotenv').config();
 const consoleReport = require("./consoleReport");
 const slackReport = require("./slackReport");
 
-const chalk = require('chalk');
 const envs = require('envs');
 
 module.exports = class report {
@@ -36,27 +35,11 @@ module.exports = class report {
 
 
     // Add Errors
-    addErrors(testRunInfo) {
-
-        if ((false == this.consoleReport.showErrors()) && (false == this.slackReport.showErrors()))
-            return;
-
-        // Any errors to display?
-        if (0 == testRunInfo.errs.length)
-            return;
-            
-        // Build the error text
-        let errorStr = "";
-        let separator = "";
-        testRunInfo. errs.forEach((err, idx) => {
-            errorStr += separator + this.formatError(err, `${idx + 1}) `);
-            separator = "\n";
-        });
-            
+    addErrors(errorStr) {
         if ((this.toConsole) && (this.consoleReport.showErrors()))
-            this.consoleReport.addErrors(message);
+            this.consoleReport.addMessage(errorStr);
         if ((this.toSlack) && (this.slackReport.showErrors()))
-            this.slackReport.addError(message);
+            this.slackReport.addMessage(errorStr);
     }
 
 

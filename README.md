@@ -38,12 +38,10 @@ In order to use this TestCafe reporter plugin it is necessary to define some `.e
 | -------- | -------- | ------- | ----------- |
 | TESTCAFE_REPORT_TOCONSOLE  | No | true | Should the report be sent to the Console? |
 | TESTCAFE_REPORT_CONSOLE_INCLUDEHEADER | No | false | Include Header information in Console report? |
-| TESTCAFE_REPORT_CONSOLE_INCLUDEFOOTER | No | true | Include Footer information in Console report? |
 | TESTCAFE_REPORT_CONSOLE_MERGE | No | false | Should the test results be merged into a single Console report, or output individually? |
 | TESTCAFE_REPORT_CONSOLE_SHOWERRORS | No | true | Should detailed error messages be displayed in the Console report? |
 | TESTCAFE_REPORT_TOSLACK    | No | false | Should the report be sent to Slack? |
 | TESTCAFE_REPORT_SLACK_INCLUDEHEADER | No | false | Include Header information in Slack report? |
-| TESTCAFE_REPORT_SLACK_INCLUDEFOOTER | No | true | Include Footer information in Slack report? |
 | TESTCAFE_REPORT_SLACK_MERGE | No | true | Should the test results be merged into a single Slack report, or output individually? |
 | TESTCAFE_REPORT_SLACK_SHOWERRORS | No | false | Should detailed error messages be displayed in the Slack report? |
 | TESTCAFE_SLACK_WEBHOOK | Yes if reporting to Slack, No otherwise |-| Slack Webhook URL |
@@ -55,13 +53,11 @@ An example `.env` file is shown below:
 ```
 TESTCAFE_REPORT_TOCONSOLE = true
 TESTCAFE_REPORT_CONSOLE_INCLUDEHEADER = true
-TESTCAFE_REPORT_CONSOLE_INCLUDEFOOTER = true
 TESTCAFE_REPORT_CONSOLE_MERGE = false
 TESTCAFE_REPORT_CONSOLE_SHOWERRORS = true
 
 TESTCAFE_REPORT_TOSLACK = true
 TESTCAFE_REPORT_SLACK_INCLUDEHEADER = false
-TESTCAFE_REPORT_SLACK_INCLUDEFOOTER = true
 TESTCAFE_REPORT_SLACK_MERGE = true
 TESTCAFE_REPORT_CONSOLE_SHOWERRORS = false
 TESTCAFE_SLACK_WEBHOOK=https://hooks.slack.com/services/*****

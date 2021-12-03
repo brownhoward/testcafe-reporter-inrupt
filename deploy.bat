@@ -1,0 +1,1 @@
+copy /Y .\lib\* C:\GitHub\inrupt\PodBrowser-TestCafe\node_modules\testcafe-reporter-inrupt\lib

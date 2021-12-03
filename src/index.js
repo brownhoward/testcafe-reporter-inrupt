@@ -1,5 +1,6 @@
 const report = require("./report");
 const envs = require("envs");
+const { strictEqual } = require("assert");
 
 module.exports = function () {
 
@@ -74,29 +75,38 @@ module.exports = function () {
             // Append to Report
             this.report.addMessage(message);
 
-            // Append Errors
-            this.report.addErrors(testRunInfo);
+            // Any errors to display?
+            if (0 < testRunInfo.errs.length) {
+        
+                // Build the error text
+                let errorStr = "";
+                let separator = "";
+                testRunInfo. errs.forEach((err, idx) => {
+                    errorStr += separator + this.formatError(err, `${idx + 1}) `);
+                    separator = "\n";
+                });
+
+                this.report.addErrors(errorStr);
+            }
         },
 
 
         // Executed when all of the tests have been executed
         reportTaskDone (endTime, passed, warnings, result) {
 
-            if (this.includeFooter) {
-                const durationMs  = endTime - this.startTime;
-                const durationStr = this.fmtTime(durationMs);
-                let footer = result.failedCount ?
-                    `${result.failedCount}/${this.testCount} failed` :
-                    `${result.passedCount} passed`;
+            const durationMs  = endTime - this.startTime;
+            const durationStr = this.fmtTime(durationMs);
+            let footer = result.failedCount ?
+                `${result.failedCount}/${this.testCount} failed` :
+                `${result.passedCount} passed`;
 
-                footer += ` (Duration: ${durationStr})`;
-                footer += ` (Skipped: ${result.skippedCount})`;
-                footer += ` (Warnings: ${warnings.length})`;
-    
-                this.report.addMessage("");
-                this.report.addMessage(footer);
-                this.report.sendTaskReport(this.testCount - passed);
-            }
+            footer += ` (Duration: ${durationStr})`;
+            footer += ` (Skipped: ${result.skippedCount})`;
+            footer += ` (Warnings: ${warnings.length})`;
+
+            this.report.addMessage("");
+            this.report.addMessage(footer);
+            this.report.sendTaskReport(this.testCount - passed);
         },
 
 
