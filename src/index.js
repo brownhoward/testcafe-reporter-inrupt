@@ -1,4 +1,6 @@
 const report = require("./report");
+const toSolid = require("./toSolid");
+
 const envs = require("envs");
 const { strictEqual } = require("assert");
 
@@ -13,15 +15,16 @@ module.exports = function () {
         // Executed prior to the start of the test run
         reportTaskStart (startTime, userAgents, testCount) {
 
-            // Create the new Report
-            this.report = new report();
-
             this.startTime = startTime;
             this.testCount = testCount;
+
+            // Create the new Report
+            this.report = new report();
 
             // Output header
             this.report.addMessage(`Date/Time: ${startTime}`);
             this.report.addMessage(`Environment: ${userAgents}`);
+            let startupTime = startTime - reporterCreatedTime;
             if (this.includeHeader) {
 
                 // Output the Report header
@@ -31,8 +34,22 @@ module.exports = function () {
                 this.report.addMessage(`Merge Request: ${envs('CI_MERGE_REQUEST_PROJECT_URL', '')}`);
                 this.report.addMessage(`User: @${envs('GITHUB_USER_LOGIN', 'No One')}`);
                 this.report.addMessage(``);
-                this.report.addMessage(`Startup time (${this.fmtTime(startTime - reporterCreatedTime)})`);
+                this.report.addMessage(`Startup time (${this.fmtTime(startupTime)})`);
             }
+
+            // To Solid
+            this.outputToSolid = ("TRUE" == envs("TESTCAFE_REPORT_TOSOLID", "TRUE").toUpperCase());
+            if (this.outputToSolid) {
+                this.toSolid = new toSolid();
+                this.toSolid.addHeaderElement("Date/Time", startTime);
+                this.toSolid.addHeaderElement("Name", envs("TESTCAFE_REPORT_SOLID_NAME", "<Unknown>"));
+                this.toSolid.addHeaderElement("Environment", userAgents);
+                this.toSolid.addHeaderElement("Against", envs('ENV', 'No env specified'));
+                this.toSolid.addHeaderElement("CI Job", envs('CI_JOB_URL', ''));
+                this.toSolid.addHeaderElement("Merge Request", envs('CI_MERGE_REQUEST_PROJECT_URL', ''));
+                this.toSolid.addHeaderElement("User", envs('GITHUB_USER_LOGIN', 'No One'));
+                this.toSolid.addHeaderElement("Startup time", this.round2dp(startupTime));   
+            }      
         },
 
 
@@ -53,17 +70,31 @@ module.exports = function () {
 
             // Errors? Warnings?
             let resultIcon = "";
-            if (testRunInfo.errs.length > 0)
+            let resultChar = "";
+            if (testRunInfo.errs.length > 0) {
                 resultIcon = ":red_circle:";
-            else if (testRunInfo.skippedCount > 0)
+                resultChar = "X";
+            }
+            else if (testRunInfo.skippedCount > 0) {
                 resultIcon = ":white_circle:";
+                resultChar = "-";
+            }
             else if (((testRunInfo.warnings !== null) && 
                      (testRunInfo.warnings !== undefined) && 
                      (testRunInfo.warnings.length > 0)) ||
-                     (testRunInfo.unstable))
+                     (testRunInfo.unstable)) {
                 resultIcon = ":large_yellow_circle:";
-            else
+                resultChar = "?";
+            }
+            else {
                 resultIcon = ":large_green_circle:";
+                resultChar = "√";
+            }
+
+            // Write to Solid
+            if (this.outputToSolid) {
+                this.toSolid.addTestResults(this.currentFixtureName, name, resultChar, this.round2dp(testRunInfo.durationMs));
+            }
 
             // Test Result
             let message = resultIcon + " " + name + " (" + durationStr + ")";
@@ -107,17 +138,33 @@ module.exports = function () {
             this.report.addMessage("");
             this.report.addMessage(footer);
             this.report.sendTaskReport(this.testCount - passed);
+
+            if (this.outputToSolid) {
+                this.toSolid.addFooterElement("duration", this.round2dp(durationMs));
+                this.toSolid.addFooterElement("passed", result.passedCount);
+                this.toSolid.addFooterElement("warnings", warnings.length);
+                this.toSolid.addFooterElement("failed", result.failedCount);
+                this.toSolid.addFooterElement("skipped", result.skippedCount);
+                this.toSolid.write();
+            }
+        },
+        
+
+        // Round Duration to 2 decimal places
+        round2dp(duration) {
+            const seconds = duration / 1000;
+            return parseFloat(seconds.toFixed(2));
         },
 
 
         // Format Duration
         fmtTime(duration) {
             if (duration < 10 * 1000) {
-              const seconds = duration / 1000
-              return seconds.toFixed(2) + 's'
+              const seconds = duration / 1000;
+              return seconds.toFixed(2) + 's';
             }
       
-            return this.moment.duration(duration).format('h[h] mm[m] ss[s]')
+            return this.moment.duration(duration).format('h[h] mm[m] ss[s]');
           }
     }
 }
